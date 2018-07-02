@@ -1,0 +1,75 @@
+{
+  "name": "@iopipe/logger",
+  "version": "0.0.0-semantically-released",
+  "description": "IOpipe plugin for logging",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "iopipe-scripts build --ignore __mocks__/*,*.test.js",
+    "commit": "iopipe-scripts commit",
+    "lint": "iopipe-scripts lint",
+    "prepublishOnly": "npm run build",
+    "prepare": "npm run build",
+    "release": "iopipe-scripts release",
+    "test": "iopipe-scripts test",
+    "validate": "iopipe-scripts validate"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iopipe/iopipe-js-logger.git"
+  },
+  "files": [
+    "dist/"
+  ],
+  "keywords": [
+    "serverless",
+    "analytics",
+    "metrics",
+    "telemetry",
+    "tracing",
+    "distributed tracing",
+    "lambda",
+    "logging",
+    "logs",
+    "logger"
+  ],
+  "author": "IOpipe <dev@iopipe.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/iopipe/iopipe-js-logger/issues"
+  },
+  "homepage": "https://github.com/iopipe/iopipe-js-logger#readme",
+  "devDependencies": {
+    "@iopipe/core": "^1.x",
+    "@iopipe/scripts": "^1.4.1",
+    "aws-lambda-mock-context": "^3.0.0",
+    "cross-spawn": "^6.0.5",
+    "delay": "^2.0.0",
+    "fs-extra": "^6.0.1",
+    "lodash": "^4.17.4"
+  },
+  "dependencies": {},
+  "pre-commit": [
+    "test"
+  ],
+  "jest": {
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "dist"
+    ]
+  },
+  "peerDependencies": {
+    "@iopipe/core": "1.x"
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/@iopipe/scripts/eslint.js",
+    "rules": {
+      "import/prefer-default-export": 0,
+      "no-console": 0
+    }
+  },
+  "eslintIgnore": [
+    "node_modules",
+    "dist",
+    "coverage"
+  ]
+}
