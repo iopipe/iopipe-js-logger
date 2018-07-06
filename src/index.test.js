@@ -1,13 +1,7 @@
-import fs from 'fs-extra';
 import path from 'path';
+import fs from 'fs-extra';
 import _ from 'lodash';
-import delay from 'delay';
-import iopipe from '@iopipe/core';
-import mockContext from 'aws-lambda-mock-context';
 import spawn from 'cross-spawn';
-
-import pkg from '../package';
-// import { invocations } from './addToReport';
 
 const loggerPlugin = require('.');
 
@@ -20,8 +14,8 @@ test('Can instantiate the plugin with no options', () => {
   const inst = plugin({});
   expect(_.isFunction(inst.hooks['post:setup'])).toBe(true);
   expect(_.isFunction(inst.postSetup)).toBe(true);
-  expect(_.isFunction(inst.hooks['pre:report'])).toBe(true);
-  expect(_.isFunction(inst.preReport)).toBe(true);
+  expect(_.isFunction(inst.hooks['post:invoke'])).toBe(true);
+  expect(_.isFunction(inst.postInvoke)).toBe(true);
   expect(_.isPlainObject(inst.config)).toBe(true);
   expect(Array.isArray(inst.logs)).toBe(true);
   expect(inst.config.enabled).toBe(false);
@@ -53,17 +47,17 @@ test('Works in testProject', () => {
   const result = spawn.sync('node', ['testProject/index.js']);
   const [, stdout, stderr] = result.output;
 
-  const outString = stdout.toString();
-  const errString = stderr.toString();
-
-  // we should still expect that typical console methods report to stdout or stderr
-  // while simultaneously capturing them to send in the report
+  // we should still expect that typical console methods report to stdout and stderr while simultaneously capturing them to send in the report
   expect(stdout.toString().split('\n')[0]).toEqual('log-string-test 72');
+  expect(stderr.toString()).toMatchSnapshot();
 
-  const { val, logs } = fs.readJsonSync(resultPath);
+  const { val, logs, putData } = fs.readJsonSync(resultPath);
   expect(val).toEqual('lambda-complete');
 
-  // ensure the logs have a timestamp now so we don't have a continual conflicting snapshot
+  // expect that the intercepted file to S3 has good data in it
+  expect(putData[0].startsWith('{"message":"log-string-test 72')).toBeTruthy();
+
+  // ensure the logs have a timestamp now before we strip them out so we don't have a continual conflicting snapshot
   expect(logs[0].timestamp).toBeGreaterThan(1530565119836);
   const logsWithoutTimestamp = logs.map(l => _.omit(l, ['timestamp']));
   expect(logsWithoutTimestamp).toMatchSnapshot();

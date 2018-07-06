@@ -39,15 +39,18 @@
   },
   "homepage": "https://github.com/iopipe/iopipe-js-logger#readme",
   "devDependencies": {
-    "@iopipe/core": "^1.x",
     "@iopipe/scripts": "^1.4.1",
     "aws-lambda-mock-context": "^3.0.0",
     "cross-spawn": "^6.0.5",
     "delay": "^2.0.0",
     "fs-extra": "^6.0.1",
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.4",
+    "nock": "^9.4.1"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@iopipe/core": "^1",
+    "simple-get": "^3.0.2"
+  },
   "pre-commit": [
     "test"
   ],
@@ -57,9 +60,7 @@
       "dist"
     ]
   },
-  "peerDependencies": {
-    "@iopipe/core": "1.x"
-  },
+  "peerDependencies": {},
   "eslintConfig": {
     "extends": "./node_modules/@iopipe/scripts/eslint.js",
     "rules": {

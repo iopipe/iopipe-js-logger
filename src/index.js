@@ -1,8 +1,15 @@
-const fs = require('fs');
-const path = require('path');
 const { Console } = require('console');
-const { Readable, Writable } = require('stream');
+const { Writable } = require('stream');
+const { util: coreUtil } = require('@iopipe/core');
+const { concat } = require('simple-get');
+
 const pkg = require('../package');
+
+const request = (...args) => {
+  return new Promise((resolve, reject) => {
+    concat(...args, (err, res) => (err ? reject(err) : resolve(res)));
+  });
+};
 
 function getConfig(config = {}) {
   const key = process.env.IOPIPE_LOGGER_ENABLED || '';
@@ -23,11 +30,12 @@ class LoggerPlugin {
   constructor(config = {}, invocationInstance) {
     this.invocationInstance = invocationInstance;
     this.logs = [];
+    this.uploads = [];
     this.config = getConfig(config);
     this.consoleMethods = {};
     this.hooks = {
       'post:setup': this.postSetup.bind(this),
-      'pre:report': this.preReport.bind(this)
+      'post:invoke': this.postInvoke.bind(this)
     };
     return this;
   }
@@ -38,8 +46,20 @@ class LoggerPlugin {
 
   postSetup() {
     if (this.config.enabled) {
+      this.fileUploadMetaPromise = this.getFileUploadMeta();
       this.runConsoleShim();
     }
+  }
+
+  getFileUploadMeta() {
+    const { startTimestamp, context = {} } = this.invocationInstance;
+    // returns a promise here
+    return coreUtil.getFileUploadMeta({
+      arn: context.invokedFunctionArn,
+      requestId: context.awsRequestId,
+      timestamp: startTimestamp,
+      auth: this.token
+    });
   }
 
   runConsoleShim() {
@@ -92,23 +112,28 @@ class LoggerPlugin {
     });
   }
 
-  preReport() {
-    methods.forEach(method => {
-      const descriptor = Object.getOwnPropertyDescriptor(
-        console,
-        `original_${method}`
-      );
-      if (descriptor) {
-        Object.defineProperty(console, method, descriptor);
-      }
-      this.logs = this.logs.concat(this.consoleMethods[method].lines);
-    });
-    fs.writeFileSync(
-      path.join(__dirname, 'output.json'),
-      JSON.stringify(this.logs),
-      'utf-8'
-    );
-    // addToReport(this);
+  async postInvoke() {
+    try {
+      methods.forEach(method => {
+        const descriptor = Object.getOwnPropertyDescriptor(
+          console,
+          `original_${method}`
+        );
+        if (descriptor) {
+          Object.defineProperty(console, method, descriptor);
+        }
+        this.logs = this.logs.concat(this.consoleMethods[method].lines);
+      });
+      const { jwtAccess, signedRequest } = await this.fileUploadMetaPromise;
+      this.uploads.push(jwtAccess);
+      await request({
+        url: signedRequest,
+        method: 'PUT',
+        body: this.logs.map(l => JSON.stringify(l)).join('\n')
+      });
+    } catch (err) {
+      console.error(err);
+    }
   }
 }
 

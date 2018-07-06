@@ -1,6 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Works in testProject 1`] = `
+"warn-string-test 72
+[Function: hrtime] { showHidden: true }
+error-string-test 72
+[Function: hrtime] { showHidden: true }
+"
+`;
+
+exports[`Works in testProject 2`] = `
 Array [
   Object {
     "message": "log-string-test 72
