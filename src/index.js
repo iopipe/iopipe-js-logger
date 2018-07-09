@@ -1,7 +1,10 @@
+const util = require('util');
 const { Console } = require('console');
 const { Writable } = require('stream');
 const { util: coreUtil } = require('@iopipe/core');
 const { concat } = require('simple-get');
+
+const debuglog = util.debuglog('iopipe:logger');
 
 const pkg = require('../package');
 
@@ -41,7 +44,13 @@ class LoggerPlugin {
   }
 
   get meta() {
-    return { name: pkg.name, version: pkg.version, homepage: pkg.homepage };
+    return {
+      name: pkg.name,
+      version: pkg.version,
+      homepage: pkg.homepage,
+      uploads: this.uploads,
+      enabled: this.config.enabled
+    };
   }
 
   postSetup() {
@@ -52,13 +61,12 @@ class LoggerPlugin {
   }
 
   getFileUploadMeta() {
-    const { startTimestamp, context = {} } = this.invocationInstance;
+    const { startTimestamp } = this.invocationInstance;
     // returns a promise here
     return coreUtil.getFileUploadMeta({
-      arn: context.invokedFunctionArn,
-      requestId: context.awsRequestId,
       timestamp: startTimestamp,
-      auth: this.token
+      auth: this.invocationInstance.config.clientId,
+      extension: '.log'
     });
   }
 
@@ -113,6 +121,9 @@ class LoggerPlugin {
   }
 
   async postInvoke() {
+    if (!this.config.enabled) {
+      return false;
+    }
     try {
       methods.forEach(method => {
         const descriptor = Object.getOwnPropertyDescriptor(
@@ -124,16 +135,22 @@ class LoggerPlugin {
         }
         this.logs = this.logs.concat(this.consoleMethods[method].lines);
       });
-      const { jwtAccess, signedRequest } = await this.fileUploadMetaPromise;
+      const { jwtAccess, signedRequest, response } = await this
+        .fileUploadMetaPromise;
       this.uploads.push(jwtAccess);
-      await request({
-        url: signedRequest,
-        method: 'PUT',
-        body: this.logs.map(l => JSON.stringify(l)).join('\n')
-      });
+      if (signedRequest) {
+        await request({
+          url: signedRequest,
+          method: 'PUT',
+          body: this.logs.map(l => JSON.stringify(l)).join('\n')
+        });
+      } else {
+        debuglog(`Bad signer response: ${response}`);
+      }
     } catch (err) {
-      console.error(err);
+      debuglog(err);
     }
+    return true;
   }
 }
 
