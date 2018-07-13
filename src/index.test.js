@@ -58,7 +58,7 @@ test('Works in testProject', () => {
   expect(putData[0].startsWith('{"message":"log-string-test 72')).toBeTruthy();
 
   // ensure the logs have a timestamp now before we strip them out so we don't have a continual conflicting snapshot
-  expect(logs[0].timestamp).toBeGreaterThan(1530565119836);
+  expect(new Date(logs[0].timestamp).valueOf()).toBeGreaterThan(1530565119836);
   const logsWithoutTimestamp = logs.map(l => _.omit(l, ['timestamp']));
   expect(logsWithoutTimestamp).toMatchSnapshot();
 });

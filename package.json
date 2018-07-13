@@ -55,9 +55,10 @@
     "test"
   ],
   "jest": {
-    "coveragePathIgnorePatterns": [
+    "testPathIgnorePatterns": [
       "/node_modules/",
-      "dist"
+      "dist",
+      "testProject"
     ]
   },
   "peerDependencies": {},

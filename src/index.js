@@ -8,6 +8,13 @@ const debuglog = util.debuglog('iopipe:logger');
 
 const pkg = require('../package');
 
+function stringNow(date = new Date()) {
+  // format date as string in Athena / Hive format
+  // ie "2018-07-03 15:23:51.000"
+  const str = date.toISOString();
+  return `${str.substring(0, 10)} ${str.substring(11, 23)}`;
+}
+
 const request = (...args) => {
   return new Promise((resolve, reject) => {
     concat(...args, (err, res) => (err ? reject(err) : resolve(res)));
@@ -72,7 +79,7 @@ class LoggerPlugin {
 
   runConsoleShim() {
     // assign a new Console for each method we want to support
-    // with it's own data
+    // with its own data
     // so we can label the data by console method later
     methods.forEach(method => {
       this.consoleMethods[method] = {
@@ -93,7 +100,7 @@ class LoggerPlugin {
           this.consoleMethods[method].lines.push({
             message: (chunk || '').toString(),
             severity: method,
-            timestamp: Date.now()
+            timestamp: stringNow()
           });
           next();
         };
