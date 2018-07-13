@@ -78,12 +78,13 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
-"@iopipe/core@^1":
-  version "1.12.0"
-  resolved "https://registry.yarnpkg.com/@iopipe/core/-/core-1.12.0.tgz#99e172a9a9426aec3cce945b5dd19dd7a3e2f7d9"
+"@iopipe/core@^1.13":
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/@iopipe/core/-/core-1.13.0.tgz#0fbbace7a58497af1fbda68eb1ab97f1f988ddb3"
   dependencies:
     cosmiconfig "^4"
     lodash.uniqby "^4.7.0"
+    simple-get "^3.0.2"
 
 "@iopipe/eslint-config-iopipe@1.0.2":
   version "1.0.2"
@@ -589,8 +590,8 @@ atob@^2.1.1:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.1.tgz#ae2d5a729477f289d60dd7f96a6314a22dd6c22a"
 
 aws-lambda-mock-context@^3.0.0:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/aws-lambda-mock-context/-/aws-lambda-mock-context-3.1.1.tgz#29b2d00bf9dc8bc461f749f8585691ee205573d5"
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/aws-lambda-mock-context/-/aws-lambda-mock-context-3.2.0.tgz#6c0769669c857539cfc08d8db14da1e91c2ed904"
   dependencies:
     moment "^2.10.5"
     pinkie-defer "^1.0.0"
@@ -2289,11 +2290,9 @@ del@^2.0.2:
     pinkie-promise "^2.0.0"
     rimraf "^2.2.8"
 
-delay@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/delay/-/delay-2.0.0.tgz#9112eadc03e4ec7e00297337896f273bbd91fae5"
-  dependencies:
-    p-defer "^1.0.0"
+delay@^3:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/delay/-/delay-3.0.0.tgz#97fc5c21028e20616e822ab11838c648808534eb"
 
 delayed-stream@~1.0.0:
   version "1.0.0"
@@ -5327,8 +5326,8 @@ nice-try@^1.0.4:
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.4.tgz#d93962f6c52f2c1558c0fbda6d512819f1efe1c4"
 
 nock@^9.4.1:
-  version "9.4.1"
-  resolved "https://registry.yarnpkg.com/nock/-/nock-9.4.1.tgz#d9a635f8f9cb861d4b63dc3e1318770266506239"
+  version "9.4.2"
+  resolved "https://registry.yarnpkg.com/nock/-/nock-9.4.2.tgz#bab58a44b5781bdb74d7808673a2dbeefafb898d"
   dependencies:
     chai "^4.1.2"
     debug "^3.1.0"
@@ -5687,10 +5686,6 @@ p-cancelable@^0.3.0:
 p-cancelable@^0.4.0:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/p-cancelable/-/p-cancelable-0.4.1.tgz#35f363d67d52081c8d9585e37bcceb7e0bbcb2a0"
-
-p-defer@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/p-defer/-/p-defer-1.0.0.tgz#9f6eb182f6c9aa8cd743004a7d4f96b196b0fb0c"
 
 p-finally@^1.0.0:
   version "1.0.0"
@@ -7499,7 +7494,11 @@ util@^0.10.3:
   dependencies:
     inherits "2.0.3"
 
-uuid@^3.0.1, uuid@^3.1.0:
+uuid@^3.0.1:
+  version "3.3.2"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
+
+uuid@^3.1.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.0.tgz#b237147804881d7b86f40a7ff8f590f15c37de32"
 

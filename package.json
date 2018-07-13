@@ -42,13 +42,13 @@
     "@iopipe/scripts": "^1.4.1",
     "aws-lambda-mock-context": "^3.0.0",
     "cross-spawn": "^6.0.5",
-    "delay": "^2.0.0",
+    "delay": "^3",
     "fs-extra": "^6.0.1",
     "lodash": "^4.17.4",
     "nock": "^9.4.1"
   },
   "dependencies": {
-    "@iopipe/core": "^1",
+    "@iopipe/core": "^1.13",
     "simple-get": "^3.0.2"
   },
   "pre-commit": [
