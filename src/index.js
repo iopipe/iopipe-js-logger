@@ -125,6 +125,7 @@ class LoggerPlugin {
       return false;
     }
     try {
+      // reset console methods back to original
       methods.forEach(method => {
         const descriptor = Object.getOwnPropertyDescriptor(
           console,
@@ -135,6 +136,10 @@ class LoggerPlugin {
         }
         this.logs = this.logs.concat(this.consoleMethods[method].lines);
       });
+      // if no logs, do not send s3 upload request
+      if (!this.logs.length) {
+        return true;
+      }
       const { jwtAccess, signedRequest, response } = await this
         .fileUploadMetaPromise;
       this.uploads.push(jwtAccess);
