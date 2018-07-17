@@ -3,8 +3,8 @@ version: 2
 jobs:
   install:
     docker:
-    - image: circleci/node:8.10
-    working_directory: ~/project
+      - image: circleci/node:8.10
+    working_directory: ~/circleci-deployment
     steps:
       - checkout
       - restore_cache:
@@ -17,8 +17,8 @@ jobs:
 
   test:
     docker:
-    - image: circleci/node:8.10
-    working_directory: ~/project
+      - image: circleci/node:8.10
+    working_directory: ~/circleci-deployment
     steps:
       - checkout
       - restore_cache:
@@ -31,8 +31,8 @@ jobs:
 
   deploy:
     docker:
-    - image: circleci/node:8.10
-    working_directory: ~/project
+      - image: circleci/node:8.10
+    working_directory: ~/circleci-deployment
     steps:
       - checkout
       - restore_cache:
