@@ -1,13 +1,10 @@
-defaults: &defaults
-  working_directory: ~/project
-  docker:
-    - image: circleci/node:8.10
-
 version: 2
 
 jobs:
   install:
-    <<: *defaults
+    docker:
+    - image: circleci/node:8.10
+    working_directory: ~/project
     steps:
       - checkout
       - restore_cache:
@@ -19,7 +16,9 @@ jobs:
           key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
 
   test:
-    <<: *defaults
+    docker:
+    - image: circleci/node:8.10
+    working_directory: ~/project
     steps:
       - checkout
       - restore_cache:
@@ -31,7 +30,9 @@ jobs:
             - dist
 
   deploy:
-    <<: *defaults
+    docker:
+    - image: circleci/node:8.10
+    working_directory: ~/project
     steps:
       - checkout
       - restore_cache:
