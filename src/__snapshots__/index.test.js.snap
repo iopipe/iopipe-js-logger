@@ -1,0 +1,77 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Works in testProject 1`] = `
+"warn-string-test 72
+[Function: hrtime] { showHidden: true }
+error-string-test 72
+[Function: hrtime] { showHidden: true }
+"
+`;
+
+exports[`Works in testProject 2`] = `
+Array [
+  Object {
+    "message": "log-string-test 72
+",
+    "severity": "log",
+  },
+  Object {
+    "message": "[Function: hrtime] { showHidden: true }
+",
+    "severity": "log",
+  },
+  Object {
+    "message": "debug-string-test 72
+",
+    "severity": "debug",
+  },
+  Object {
+    "message": "[Function: hrtime] { showHidden: true }
+",
+    "severity": "debug",
+  },
+  Object {
+    "message": "info-string-test 72
+",
+    "severity": "info",
+  },
+  Object {
+    "message": "[Function: hrtime] { showHidden: true }
+",
+    "severity": "info",
+  },
+  Object {
+    "message": "warn-string-test 72
+",
+    "severity": "warn",
+  },
+  Object {
+    "message": "[Function: hrtime] { showHidden: true }
+",
+    "severity": "warn",
+  },
+  Object {
+    "message": "error-string-test 72
+",
+    "severity": "error",
+  },
+  Object {
+    "message": "[Function: hrtime] { showHidden: true }
+",
+    "severity": "error",
+  },
+  Object {
+    "message": "'dir-string-test'
+",
+    "severity": "dir",
+  },
+  Object {
+    "message": "{ [Function: hrtime]
+  [length]: 1,
+  [name]: 'hrtime',
+  [prototype]: hrtime { [constructor]: [Circular] } }
+",
+    "severity": "dir",
+  },
+]
+`;
