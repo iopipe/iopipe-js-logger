@@ -16,6 +16,10 @@ jobs:
           paths:
             - node_modules
           key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths:
+            - node_modules
 
   test:
     <<: *defaults
