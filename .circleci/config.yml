@@ -1,5 +1,4 @@
 defaults: &defaults
-  working_directory: ~/circleci-deployment
   docker:
     - image: circleci/node:8.10
 
@@ -11,7 +10,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: ~/circleci-deployment
+          at: /tmp/workspace
       - restore_cache:
           keys:
           - yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
@@ -22,19 +21,23 @@ jobs:
           paths:
             - node_modules
           key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      - persist_to_workspace:
+          root: /tmp/workspace
 
   test:
     <<: *defaults
     steps:
+      - checkout
       - attach_workspace:
-          at: ~/circleci-deployment
+          at: /tmp/workspace
       - run: yarn run validate
 
   deploy:
     <<: *defaults
     steps:
+      - checkout
       - attach_workspace:
-          at: ~/circleci-deployment
+          at: /tmp/workspace
       - run:
           cp .npmrc-ci .npmrc
           yarn run release
