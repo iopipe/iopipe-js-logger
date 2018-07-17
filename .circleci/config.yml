@@ -23,10 +23,10 @@ jobs:
           key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
 
   test:
-    <<: * defaults
+    <<: *defaults
     steps:
       - attach_workspace:
-        at: ~/circleci-deployment
+          at: ~/circleci-deployment
       - run: yarn run validate
 
   deploy:
