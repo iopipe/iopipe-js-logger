@@ -1,0 +1,55 @@
+defaults: &defaults
+  version: 2
+  working_directory: ~/circleci-deployment
+  docker:
+    - image: circleci/node:8.10
+
+jobs:
+  checkout:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/circleci-deployment
+      - restore_cache:
+          keys:
+          - yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          - yarn-cache-{{ .Branch }}
+          - yarn-cache-
+      - run: yarn
+      - save_cache:
+          paths:
+            - node_modules
+          key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+
+  test:
+    <<: * defaults
+    steps:
+      - attach_workspace:
+        at: ~/circleci-deployment
+      - run: yarn run validate
+
+  deploy:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/circleci-deployment
+      - run:
+          yarn run release
+
+workflows:
+  version: 2
+  test_build_deploy:
+    jobs:
+      - checkout
+      - test:
+          requires:
+            - checkout
+      - deploy:
+          requires:
+            - checkout
+            - test
+          filters:
+            branches:
+              only:
+                - master
