@@ -10,7 +10,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: /tmp/workspace
+          at: ~/circleci-workspace
       - restore_cache:
           key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
       - run: yarn
@@ -19,7 +19,7 @@ jobs:
             - node_modules
           key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
       - persist_to_workspace:
-          root: /tmp/workspace
+          root: .
           paths:
             - node_modules
 
@@ -28,10 +28,10 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: /tmp/workspace
+          at: ~/circleci-workspace
       - run: yarn run validate
       - persist_to_workspace:
-          root: /tmp/workspace
+          root: .
           paths:
             - dist
 
@@ -40,7 +40,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: /tmp/workspace
+          at: ~/circleci-workspace
       - run: cp .npmrc-ci .npmrc
       - run: yarn run release
 
