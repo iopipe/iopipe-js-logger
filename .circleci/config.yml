@@ -1,8 +1,9 @@
 defaults: &defaults
-  version: 2
   working_directory: ~/circleci-deployment
   docker:
     - image: circleci/node:8.10
+
+version: 2
 
 jobs:
   checkout:
@@ -35,6 +36,7 @@ jobs:
       - attach_workspace:
           at: ~/circleci-deployment
       - run:
+          cp .npmrc-ci .npmrc
           yarn run release
 
 workflows:
