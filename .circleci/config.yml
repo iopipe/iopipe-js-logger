@@ -9,6 +9,8 @@ jobs:
     <<: *defaults
     steps:
       - checkout
+      - attach_workspace:
+          at: /tmp/workspace
       - restore_cache:
           key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
       - run: yarn
