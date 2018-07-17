@@ -5,24 +5,17 @@ defaults: &defaults
 version: 2
 
 jobs:
-  checkout:
+  install:
     <<: *defaults
     steps:
       - checkout
-      - attach_workspace:
-          at: /tmp/workspace
       - restore_cache:
-          keys:
-          - yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
-          - yarn-cache-{{ .Branch }}
-          - yarn-cache-
+          key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
       - run: yarn
       - save_cache:
           paths:
             - node_modules
           key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
-      - persist_to_workspace:
-          root: /tmp/workspace
 
   test:
     <<: *defaults
@@ -31,6 +24,10 @@ jobs:
       - attach_workspace:
           at: /tmp/workspace
       - run: yarn run validate
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths:
+            - dist
 
   deploy:
     <<: *defaults
@@ -38,21 +35,20 @@ jobs:
       - checkout
       - attach_workspace:
           at: /tmp/workspace
-      - run:
-          cp .npmrc-ci .npmrc
-          yarn run release
+      - run: cp .npmrc-ci .npmrc
+      - run: yarn run release
 
 workflows:
   version: 2
   test_build_deploy:
     jobs:
-      - checkout
+      - install
       - test:
           requires:
-            - checkout
+            - install
       - deploy:
           requires:
-            - checkout
+            - install
             - test
           filters:
             branches:
