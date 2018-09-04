@@ -147,15 +147,22 @@ class LoggerPlugin {
       if (!this.logs.length) {
         return true;
       }
-      const { jwtAccess, signedRequest, response } = await this
+      const { jwtAccess, signedRequest, response, url } = await this
         .fileUploadMetaPromise;
-      this.uploads.push(jwtAccess);
+      debuglog(`Signer response: ${response}`);
       if (signedRequest) {
+        debuglog(`Signed request received for ${url}`);
         await request({
           url: signedRequest,
           method: 'PUT',
           body: this.logs.map(l => JSON.stringify(l)).join('\n')
         });
+        if (
+          typeof this.invocationInstance.context.iopipe.label === 'function'
+        ) {
+          this.invocationInstance.context.iopipe.label('@iopipe/plugin-logger');
+        }
+        this.uploads.push(jwtAccess);
       } else {
         debuglog(`Bad signer response: ${response}`);
       }
