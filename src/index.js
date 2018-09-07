@@ -73,7 +73,10 @@ class LoggerPlugin {
     return coreUtil.getFileUploadMeta({
       timestamp: startTimestamp,
       auth: this.invocationInstance.config.clientId,
-      extension: '.log'
+      extension: '.log',
+      requestId:
+        this.invocationInstance.context &&
+        this.invocationInstance.context.awsRequestId
     });
   }
 
@@ -147,9 +150,9 @@ class LoggerPlugin {
       if (!this.logs.length) {
         return true;
       }
-      const { jwtAccess, signedRequest, response, url } = await this
-        .fileUploadMetaPromise;
-      debuglog(`Signer response: ${response}`);
+      const requestData = await this.fileUploadMetaPromise;
+      const { jwtAccess, signedRequest, url } = requestData;
+      debuglog(`Signer response: ${JSON.stringify(requestData)}`);
       if (signedRequest) {
         debuglog(`Signed request received for ${url}`);
         await request({
@@ -164,7 +167,7 @@ class LoggerPlugin {
         }
         this.uploads.push(jwtAccess);
       } else {
-        debuglog(`Bad signer response: ${response}`);
+        debuglog(`Bad signer response: ${JSON.stringify(requestData)}`);
       }
     } catch (err) {
       debuglog(err);
