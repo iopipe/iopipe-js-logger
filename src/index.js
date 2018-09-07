@@ -73,7 +73,10 @@ class LoggerPlugin {
     return coreUtil.getFileUploadMeta({
       timestamp: startTimestamp,
       auth: this.invocationInstance.config.clientId,
-      extension: '.log'
+      extension: '.log',
+      requestId:
+        this.invocationInstance.context &&
+        this.invocationInstance.context.awsRequestId
     });
   }
 
