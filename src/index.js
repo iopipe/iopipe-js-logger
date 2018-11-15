@@ -30,7 +30,8 @@ function getConfig(config = {}) {
     enabled = false;
   }
   return {
-    enabled: Boolean(enabled)
+    enabled: Boolean(enabled),
+    networkTimeout: config.networkTimeout || 5000
   };
 }
 
@@ -76,7 +77,8 @@ class LoggerPlugin {
       extension: '.log',
       requestId:
         this.invocationInstance.context &&
-        this.invocationInstance.context.awsRequestId
+        this.invocationInstance.context.awsRequestId,
+      networkTimeout: this.config.networkTimeout
     });
   }
 
