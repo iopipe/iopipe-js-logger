@@ -40,6 +40,10 @@ exports.handler = iopipe(async (event) => {
 
 By default, this plugin is disabled. To automatically record output of calls to `console`, set this value to `true`. You can also use an environment variable like this: `IOPIPE_LOGGER_ENABLED=true`.
 
+#### `networkTimeout` (number: optional = 5000)
+
+Network timeout for uploading logs to IOpipe.
+
 ## License
 
 Apache-2.0 see [LICENSE](https://www.apache.org/licenses/LICENSE-2.0.html)
